@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flight Attendant Training Redesign — Sophia Guild</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Albert+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    :root {
+      --ink:    #0E0004;
+      --stone:  #7C8A8D;
+      --rust:   #803300;
+      --bronze: #79592B;
+      --cream:  #F2E9DC;
+      --cream-muted: #e8d9c8;
+      --stone-light: #a5b2b5;
+      --ink-soft: #1a0a0e;
+    }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'Albert Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--cream);
+      border-bottom: 1px solid rgba(14,0,4,0.1);
+    }
+    .header-inner {
+      max-width: 1200px; margin: 0 auto; padding: 0 32px;
+      height: 56px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .wordmark {
+      font-family: 'Inter', sans-serif; font-weight: 700; font-size: 15px;
+      color: var(--ink); letter-spacing: -0.01em; cursor: pointer;
+    }
+    nav { display: flex; align-items: center; gap: 4px; }
+    .nav-link {
+      background: none; border: none; cursor: pointer;
+      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+      color: var(--ink); padding: 6px 12px; letter-spacing: 0.04em;
+      text-transform: uppercase; opacity: 0.6; transition: opacity 150ms;
+    }
+    .nav-link:hover { opacity: 1; }
+    .resume-btn {
+      background: var(--ink); color: var(--cream); border: none; border-radius: 4px;
+      padding: 7px 16px; font-family: 'Inter', sans-serif; font-size: 12px;
+      font-weight: 600; cursor: pointer; margin-left: 8px; transition: background 150ms;
+    }
+    .resume-btn:hover { background: var(--rust); }
+
+    /* ── LAYOUT WRAPPER ── */
+    .page { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+
+    /* ── BACK LINK ── */
+    .back-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase; color: var(--stone);
+      cursor: pointer; padding: 24px 0 0; transition: color 150ms;
+      background: none; border: none;
+    }
+    .back-link:hover { color: var(--rust); }
+
+    /* ── CASE HERO ── */
+    .case-hero { padding: 32px 0 48px; border-bottom: 1px solid rgba(14,0,4,0.1); }
+    .case-meta-row {
+      display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    .tag-company {
+      font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--rust);
+    }
+    .tag-sep { font-size: 11px; color: var(--stone); opacity: 0.4; }
+    .tag-pill {
+      font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase; color: var(--stone);
+      border: 1px solid rgba(14,0,4,0.15); border-radius: 9999px; padding: 3px 10px;
+    }
+
+    .case-title-block { margin-bottom: 40px; }
+    .case-display-title {
+      font-family: 'Inter', sans-serif; font-size: clamp(48px, 6vw, 80px);
+      font-weight: 900; color: var(--ink); line-height: 1.0; letter-spacing: -0.03em;
+    }
+    .case-display-title .italic-word {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic; font-weight: 700; color: var(--rust);
+    }
+
+    .case-intro-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start;
+    }
+    .case-intro-text p {
+      font-family: 'Albert Sans', sans-serif; font-size: 16px; color: var(--ink);
+      line-height: 1.7; opacity: 0.75; margin-bottom: 16px;
+    }
+    .case-intro-text p:last-child { margin-bottom: 0; }
+
+    .case-intro-meta { display: flex; flex-direction: column; gap: 20px; }
+    .meta-block-label {
+      font-family: 'Inter', sans-serif; font-size: 9px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone);
+      margin-bottom: 4px;
+    }
+    .meta-block-value {
+      font-family: 'Albert Sans', sans-serif; font-size: 14px; color: var(--ink);
+      line-height: 1.5;
+    }
+
+    /* ── METRICS BAR ── */
+    .metrics-bar {
+      display: flex; gap: 0;
+      border-top: 1px solid rgba(14,0,4,0.1);
+      border-bottom: 1px solid rgba(14,0,4,0.1);
+      margin: 48px 0;
+    }
+    .metric-item {
+      flex: 1; padding: 28px 32px;
+      border-right: 1px solid rgba(14,0,4,0.1);
+    }
+    .metric-item:last-child { border-right: none; }
+    .metric-num {
+      font-family: 'Inter', sans-serif; font-size: 40px; font-weight: 700;
+      color: var(--ink); line-height: 1; letter-spacing: -0.02em; margin-bottom: 4px;
+    }
+    .metric-label {
+      font-family: 'Inter', sans-serif; font-size: 9px; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--stone);
+    }
+
+    /* ── SECTION ── */
+    .cs-section { padding: 56px 0; border-bottom: 1px solid rgba(14,0,4,0.08); }
+    .cs-section:last-of-type { border-bottom: none; }
+
+    .section-eyebrow {
+      font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--rust);
+      margin-bottom: 12px;
+    }
+    .section-heading {
+      font-family: 'Inter', sans-serif; font-size: 32px; font-weight: 700;
+      color: var(--ink); line-height: 1.15; letter-spacing: -0.02em;
+      margin-bottom: 24px; max-width: 640px;
+    }
+    .section-heading .italic-word {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic; font-weight: 700; color: var(--rust);
+    }
+    .section-body {
+      font-family: 'Albert Sans', sans-serif; font-size: 15px; color: var(--ink);
+      line-height: 1.75; opacity: 0.72; max-width: 680px; margin-bottom: 16px;
+    }
+    .section-body:last-child { margin-bottom: 0; }
+
+    /* Two-col text layout */
+    .two-col-text {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-top: 32px;
+    }
+    .two-col-text .section-body { max-width: none; margin-bottom: 0; }
+
+    /* ── IMAGE PLACEHOLDERS ── */
+    .img-row { display: grid; gap: 16px; margin-top: 32px; }
+    .img-row.cols-2 { grid-template-columns: 1fr 1fr; }
+    .img-row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .img-row.cols-1 { grid-template-columns: 1fr; }
+
+    .img-block { display: flex; flex-direction: column; gap: 8px; }
+    .img-ph {
+      background: var(--cream-muted);
+      border: 1px solid rgba(14,0,4,0.1);
+      border-radius: 4px;
+      position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .img-ph::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        45deg, transparent, transparent 8px,
+        rgba(14,0,4,0.03) 8px, rgba(14,0,4,0.03) 9px
+      );
+    }
+    .img-ph.tall { aspect-ratio: 4/3; }
+    .img-ph.wide { aspect-ratio: 16/7; }
+    .img-ph.short { aspect-ratio: 16/5; }
+
+    .img-ph-label {
+      position: absolute;
+      font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 500;
+      color: var(--stone); text-align: center; padding: 16px; line-height: 1.5;
+    }
+    .img-ph-badge {
+      position: absolute; top: 12px; left: 12px;
+      font-family: 'Inter', sans-serif; font-size: 9px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink);
+      border: 1px solid rgba(14,0,4,0.2); border-radius: 3px; padding: 2px 8px;
+      background: var(--cream);
+    }
+    .img-caption {
+      font-family: 'Albert Sans', sans-serif; font-size: 12px;
+      color: var(--stone); line-height: 1.4; font-style: italic;
+    }
+
+    /* ── FINDINGS LIST ── */
+    .findings-list { margin-top: 24px; display: flex; flex-direction: column; gap: 16px; }
+    .finding-item {
+      display: grid; grid-template-columns: 32px 1fr; gap: 16px; align-items: start;
+    }
+    .finding-num {
+      font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700;
+      color: var(--rust); letter-spacing: 0.04em; padding-top: 2px;
+    }
+    .finding-text {
+      font-family: 'Albert Sans', sans-serif; font-size: 15px; color: var(--ink);
+      line-height: 1.65; opacity: 0.78;
+    }
+    .finding-text strong { font-weight: 600; opacity: 1; color: var(--ink); }
+
+    .callout-box {
+      background: var(--cream-muted);
+      border: 1px solid rgba(14,0,4,0.1);
+      border-radius: 6px;
+      padding: 32px;
+      margin-top: 24px;
+    }
+    .callout-box .finding-item {
+      padding-bottom: 20px; margin-bottom: 20px;
+      border-bottom: 1px solid rgba(14,0,4,0.08);
+    }
+    .callout-box .finding-item:last-child {
+      padding-bottom: 0; margin-bottom: 0; border-bottom: none;
+    }
+
+    .quote-block {
+      border-left: 2px solid var(--rust);
+      padding: 16px 0 16px 28px;
+      margin: 40px 0;
+    }
+    .quote-text {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic; font-size: 22px; color: var(--ink);
+      line-height: 1.5; margin-bottom: 10px;
+    }
+    .quote-source {
+      font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase; color: var(--stone);
+    }
+
+    /* ── NEXT PROJECT ── */
+    .next-project {
+      padding: 64px 0;
+      border-top: 1px solid rgba(14,0,4,0.1);
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 24px;
+    }
+    .next-label {
+      font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone);
+      margin-bottom: 8px;
+    }
+    .next-title {
+      font-family: 'Inter', sans-serif; font-size: 24px; font-weight: 700;
+      color: var(--ink); letter-spacing: -0.01em;
+    }
+    .next-btn {
+      background: var(--ink); color: var(--cream); border: none; border-radius: 3px;
+      padding: 12px 24px; font-family: 'Inter', sans-serif; font-size: 12px;
+      font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+      cursor: pointer; transition: background 150ms; white-space: nowrap;
+    }
+    .next-btn:hover { background: var(--rust); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink); color: var(--cream);
+      padding: 48px 32px 36px;
+    }
+    .footer-inner { max-width: 1200px; margin: 0 auto; }
+    .footer-bottom {
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .footer-copy { font-family: 'Inter', sans-serif; font-size: 12px; color: var(--stone); }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-link {
+      font-family: 'Inter', sans-serif; font-size: 12px; color: var(--stone);
+      cursor: pointer; transition: color 150ms;
+    }
+    .footer-link:hover { color: var(--cream); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .header-inner { padding: 0 16px; }
+      .page { padding: 0 16px; }
+      .case-intro-grid { grid-template-columns: 1fr; gap: 32px; }
+      .two-col-text { grid-template-columns: 1fr; gap: 24px; }
+      .img-row.cols-2 { grid-template-columns: 1fr; }
+      .img-row.cols-3 { grid-template-columns: 1fr; }
+      .metrics-bar { flex-direction: column; }
+      .metric-item { border-right: none; border-bottom: 1px solid rgba(14,0,4,0.1); padding: 20px 16px; }
+      .metric-item:last-child { border-bottom: none; }
+      .next-project { flex-direction: column; align-items: flex-start; }
+      .case-display-title { font-size: clamp(36px, 10vw, 60px); }
+      .section-heading { font-size: 24px; }
+      .finding-item { grid-template-columns: 28px 1fr; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-inner">
+      <span class="wordmark" onclick="goHome()">Sophia Guild</span>
+      <nav>
+        <button class="nav-link" onclick="goHome()">Work</button>
+        <button class="nav-link" onclick="goHome()">About</button>
+        <button class="nav-link" onclick="goHome()">Contact</button>
+        <button class="resume-btn">Resume →</button>
+      </nav>
+    </div>
+  </header>
+
+  <div class="page">
+
+    <!-- BACK -->
+    <button class="back-link" onclick="goHome()">← Back to work</button>
+
+    <!-- HERO -->
+    <div class="case-hero">
+      <div class="case-meta-row">
+        <span class="tag-company">Envoy Airlines</span>
+        <span class="tag-sep">·</span>
+        <span class="tag-pill">Summer 2025</span>
+        <span class="tag-pill">Educational Design</span>
+        <span class="tag-pill">Capstone</span>
+        <span class="tag-pill">Training Redesign</span>
+      </div>
+
+      <div class="case-title-block">
+        <h1 class="case-display-title">
+          Flight Attendant<br>
+          Training <span class="italic-word">Redesign</span>
+        </h1>
+      </div>
+
+      <div class="case-intro-grid">
+        <div class="case-intro-text">
+          <p>As part of a summer internship with Envoy Airlines' Flight Service Procedures department, I led the redesign of Crew Duties: Phase 1 — one of the first training presentations delivered to new hire flight attendants.</p>
+          <p>My role spanned content strategy, instructional design, and technical writing as I overhauled a 130-slide, four-hour curriculum to improve engagement, comprehension, and alignment with FAA regulatory standards.</p>
+        </div>
+        <div class="case-intro-meta">
+          <div class="meta-block">
+            <div class="meta-block-label">My Role</div>
+            <div class="meta-block-value">Content strategy, instructional design, technical writing — Flight Service Procedures department</div>
+          </div>
+          <div class="meta-block">
+            <div class="meta-block-label">Methods</div>
+            <div class="meta-block-value">Live session observation, content audit, IPM compliance review, instructional redesign</div>
+          </div>
+          <div class="meta-block">
+            <div class="meta-block-label">Timeline</div>
+            <div class="meta-block-value">Summer 2025 · Internship</div>
+          </div>
+          <div class="meta-block">
+            <div class="meta-block-label">Deliverable</div>
+            <div class="meta-block-value">Complete 130-slide production release, validated against FAA regulatory requirements</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- METRICS -->
+    <div class="metrics-bar">
+      <div class="metric-item">
+        <div class="metric-num">130</div>
+        <div class="metric-label">Slides Redesigned</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-num">4h</div>
+        <div class="metric-label">Curriculum Length</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-num">3</div>
+        <div class="metric-label">Design Interventions</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-num">FAA</div>
+        <div class="metric-label">Regulatory Alignment</div>
+      </div>
+    </div>
+
+    <!-- SECTION 01 — CONTEXT -->
+    <div class="cs-section">
+      <div class="section-eyebrow">01 — Context</div>
+      <h2 class="section-heading">Redesigning educational materials for flight attendants</h2>
+      <p class="section-body">Crew Duties: Phase 1 is one of the first training presentations that new hire flight attendants receive — delivered on Day 2 of their initial onboarding program. At four hours and 130 slides, the instructor-led course establishes a baseline understanding of roles, responsibilities, safety procedures, and in-flight service standards for incoming cabin crew.</p>
+      <p class="section-body">Because flight attendants are held to strict FAA compliance standards, the accuracy and clarity of this material directly affects both safety outcomes and regulatory standing.</p>
+
+      <div class="quote-block">
+        <div class="quote-text">"Redesign the Crew Duties: Phase 1 training to promote learning through an interactive, engaging presentation that supports concept retention and FAA regulatory compliance."</div>
+        <div class="quote-source">Project Goal</div>
+      </div>
+    </div>
+
+    <!-- SECTION 02 — PROCESS -->
+    <div class="cs-section">
+      <div class="section-eyebrow">02 — Process</div>
+      <h2 class="section-heading">Observation &amp; <span class="italic-word">discovery</span></h2>
+      <p class="section-body">The redesign began with direct observation of a live Crew Duties training session. I attended a full four-hour delivery of the training to document how students engaged with the material, where instructors had to compensate for slide limitations, and where pacing broke down.</p>
+      <p class="section-body">Findings were cross-referenced against the Inflight Procedures Manual (IPM) and current FAA regulatory requirements to ensure any changes preserved and improved compliance alignment.</p>
+
+
+    </div>
+
+    <!-- SECTION 03 — FINDINGS -->
+    <div class="cs-section">
+      <div class="section-eyebrow">03 — Findings</div>
+      <h2 class="section-heading">Areas for improvement</h2>
+      <p class="section-body">After observing the training delivery, three core issues emerged consistently across the session.</p>
+
+      <div class="callout-box">
+        <div class="findings-list" style="margin-top:0;">
+          <div class="finding-item">
+            <span class="finding-num">F1</span>
+            <span class="finding-text"><strong>Repetitive slide template.</strong> Every slide used the identical layout, making the content visually monotonous and reducing student anticipation or engagement with each new screen. Varied layouts, progressive reveals, and animated transitions were needed to restore pacing variety.</span>
+          </div>
+          <div class="finding-item">
+            <span class="finding-num">F2</span>
+            <span class="finding-text"><strong>Photo-only slides with no on-screen text.</strong> Many slides displayed a single photograph while the instructor read from notes, leaving students with no anchoring text to reference or retain. Without visible text, students depended entirely on working memory during instruction — reducing recall of critical safety and service procedures.</span>
+          </div>
+          <div class="finding-item">
+            <span class="finding-num">F3</span>
+            <span class="finding-text"><strong>Difficulty referencing the IPM.</strong> Instructors regularly asked students to locate specific chapters and sections in their Inflight Procedures Manual. Students frequently struggled to find the correct reference quickly, disrupting class flow. Adding direct IPM citations to applicable slides would reduce friction and keep the session on schedule.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 04 — REDESIGN -->
+    <div class="cs-section">
+      <div class="section-eyebrow">04 — Redesign (Selected Works)</div>
+      <h2 class="section-heading">Targeted <span class="italic-word">design</span> changes</h2>
+      <p class="section-body">The redesign addressed each identified gap through four representative slide sections — each demonstrating a distinct intervention. All changes were made within the existing Envoy brand framework and subject to FAA compliance review.</p>
+
+      <div class="findings-list">
+
+        <div class="finding-item">
+          <span class="finding-num">D1</span>
+          <span class="finding-text"><strong>Customer Preboarding — Smooth Transitions &amp; Minimal Text.</strong> Slide transitions were redesigned to be smooth and logical, guiding students through content without abrupt shifts. Minimal supporting text was added to anchor key points while allowing the instructor to hold student focus.</span>
+        </div>
+        <div class="img-row cols-2" style="margin-top:12px;margin-bottom:8px;">
+          <div class="img-block">
+            <div class="img-ph tall"><span class="img-ph-badge">Before</span><img src="uploads/four point briefing-59ef2a92.jpg" alt="Customer Preboarding — original slide" style="width:100%;display:block;border-radius:4px;"></div>
+            <div class="img-caption">Before: Abrupt transition, no on-screen text to anchor key points.</div>
+          </div>
+          <div class="img-block">
+            <div class="img-ph tall"><span class="img-ph-badge">After</span><img src="uploads/four-point-briefing.gif" alt="Customer Preboarding — redesigned slide" style="width:100%;display:block;border-radius:4px;"></div>
+            <div class="img-caption">After: Smooth transition and minimal supporting text added.</div>
+          </div>
+        </div>
+
+        <div class="finding-item" style="margin-top:16px;">
+          <span class="finding-num">D2</span>
+          <span class="finding-text"><strong>Originating Flights — Sequential Concept Reveals.</strong> Content covering originating flights, late inbound coordination, and gate agent communication was restructured so each concept appeared on its own slide and was revealed one-by-one — eliminating information overload and directing student attention.</span>
+        </div>
+        <div class="img-row cols-2" style="margin-top:12px;margin-bottom:8px;">
+          <div class="img-block">
+            <div class="img-ph tall"><span class="img-ph-badge">Before</span><img src="uploads/5.jpg" alt="Originating Flights — original slide" style="width:100%;display:block;border-radius:4px;"></div>
+            <div class="img-caption">Before: A photo-only slide visual while important information was read off of a script.</div>
+          </div>
+          <div class="img-block">
+            <div class="img-ph tall"><span class="img-ph-badge">After</span><img src="uploads/originating-flights.gif" alt="Originating Flights — sequential concept reveal" style="width:100%;display:block;border-radius:4px;"></div>
+            <div class="img-caption">After: Each concept revealed one-by-one across individual slides, with pertinent information added.</div>
+          </div>
+        </div>
+
+        <div class="finding-item" style="margin-top:16px;">
+          <span class="finding-num">D3</span>
+          <span class="finding-text"><strong>Prior to Takeoff Compliance Check — IPM Citations Added.</strong> The specific IPM chapter, section number, and title were added directly to the slide so students could locate the reference quickly. Supporting text was also added to highlight key steps in the visual crosscheck procedure.</span>
+        </div>
+        <div class="img-row cols-2" style="margin-top:12px;margin-bottom:8px;">
+          <div class="img-block">
+            <div class="img-ph tall"><span class="img-ph-badge">Before</span><img src="uploads/6.jpg" alt="Prior to Takeoff — original slide" style="width:100%;display:block;border-radius:4px;"></div>
+            <div class="img-caption">Before: No IPM citation, students unable to quickly locate the relevant manual section.</div>
+          </div>
+          <div class="img-block">
+            <div class="img-ph tall"><span class="img-ph-badge">After</span><img src="uploads/prior-to-takeoff.gif" alt="Prior to Takeoff — IPM citations added" style="width:100%;display:block;border-radius:4px;"></div>
+            <div class="img-caption">After: IPM chapter, section number, and title added directly to the slide.</div>
+          </div>
+        </div>
+
+      </div>
+
+
+    </div>
+
+    <!-- SECTION 05 — OUTCOME -->
+    <div class="cs-section">
+      <div class="section-eyebrow">05 — Outcome</div>
+      <h2 class="section-heading">Impact &amp; reflection</h2>
+
+      <div class="two-col-text">
+        <div>
+          <p class="section-body">This project required rapidly building domain expertise in an unfamiliar industry. I learned flight attendant roles, responsibilities, acronyms, and FAA safety standards within weeks. That learning curve reinforced a core UX principle: proximity to subject-matter experts is essential, and immersion accelerates understanding.</p>
+        </div>
+        <div>
+          <p class="section-body">Redesigning 130 slides under a compressed timeline also strengthened time management and prioritization skills, making scope and sequencing decisions quickly while maintaining quality standards. The internship has sparked an ongoing interest in pursuing UX work within the aviation industry.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- NEXT PROJECT -->
+    <div class="next-project">
+      <div>
+        <div class="next-label">Next Project</div>
+        <div class="next-title">Discover Experience Usability Test</div>
+      </div>
+      <button class="next-btn" onclick="window.location.href='Case Study - Foundry.html'">View case study →</button>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-bottom">
+        <span class="footer-copy">© 2026 Sophia Guild</span>
+        <div class="footer-links">
+          <span class="footer-link">LinkedIn</span>
+          <span class="footer-link">Resume</span>
+          <span class="footer-link">Email</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function goHome() {
+      window.location.href = 'Portfolio Homepage.html';
+    }
+  </script>
+</body>
+</html>
